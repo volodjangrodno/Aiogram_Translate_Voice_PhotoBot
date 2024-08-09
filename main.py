@@ -19,6 +19,14 @@ translator = GoogleTranslator(source='auto', target='en')
 if not os.path.exists('img'):
     os.makedirs('img')
 
+@dp.message(CommandStart())
+async def start(message: Message):
+    await message.answer(f"Привет, {message.from_user.full_name}! Я бот для перевода текста и голосового сообщения.")
+
+@dp.message(Command('help'))
+async def help(message: Message):
+    await message.answer("Этот бот умеет выполнять команды:\n /start \n /help \n /voice")
+
 @dp.message(F.photo)
 async def photos(message: Message):
     photo = message.photo[-1]
@@ -40,13 +48,7 @@ async def translate_text(message: Message):
     translated_text = translator.translate(message.text)
     await message.reply(f"Перевод: {translated_text}")
 
-@dp.message(CommandStart())
-async def start(message: Message):
-    await message.answer(f"Привет, {message.from_user.full_name}! Я бот для перевода текста и голосового сообщения.")
 
-@dp.message(Command('help'))
-async def help(message: Message):
-    await message.answer("Этот бот умеет выполнять команды:\n /start \n /help \n /voice")
 
 async def main():
     await dp.start_polling(bot)
